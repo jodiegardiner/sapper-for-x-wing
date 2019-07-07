@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block title %}Event Detail{% endblock %}
+{% block content %}
+    {% set event_size = event.participants|length %}
+
+    <div class="row">
+        <div class="col-sm-8">
+            <div class="card">
+
+                <h2 class="event-name">{{ event.name }}</h2>
+                <div class="col-sm-6">
+                    <h4>{{ event.location }}, {{ event.state }} <span
+                            class="float-right event-country">{{ event.country }} </span></h4>
+                    <h4>{{ event.date }} <span class="float-right num-players">{{ event_size }}&nbsp;<i
+                            title="{{ event_size }} players"
+                            class="fas fa-users"></i></span></h4>
+                    <h4>ID: {{ event.id }} <span class="float-right json-link"><a
+                            href="{{ api }}{{ event.id }}">Source</a></span>
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="row">
+
+                    <div class="col-sm-12"><h2 class="top-table">TOP 4</h2>
+                        <hr>
+                        <div class="row">
+                            {% for player in event.participants %}
+                                {% if loop.index < 5 %}
+                                    <div class="col-sm-6">
+                                        <div class="card card-top card-{{ loop.index }}">
+                                            <h5 class="top-player-name">{{ player.name|truncate(25, True) }}</h5>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card card-event-table">
+
+
+                <table class="table table-responsive table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Player</th>
+                        <th>Faction</th>
+                        <th>List json</th>
+
+                        <th>List</th>
+                        <th>MoV</th>
+                        <th>SoS</th>
+                        <th>Swiss Rank</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for player in event.participants %}
+                        <tr>
+                            <td>{% if player.swiss_rank == 1 %}
+                                <i title="Topped Swiss" class="fas fa-trophy trophy-swiss"></i>{% else %}{% endif %}
+                                {% if loop.index == 1 %}&nbsp;
+                                    <i title="Winner" class="fas fa-trophy trophy-winner"></i>{% elif loop.index == 2 %}
+                                    &nbsp;
+                                    <i title="2nd" class="fas fa-trophy trophy-second"></i>{% endif %}</td>
+                            <td>{{ player.name }}</td>
+                            {% if player.list_json.faction %}
+
+                                <td><img
+                                        src="{{ url_for('static', filename=get_faction_icon(player.list_json.faction)) }}">
+                                </td>
+                            {% else %}
+                                <td><i class="fa fa-question"></i></td>
+                            {% endif %}
+                            <td>
+                                {% if player.list_json %}
+                                    {% for pilot in player.list_json.pilots %}
+                                        {{ pilot.ship }} - {{ pilot.id }}
+                                        {#                            <img src="{{ url_for('static', filename=get_ship_icon(pilot.ship)) }}" alt="">&nbsp;&nbsp;#}
+                                    {% endfor %}
+                                {% else %} No link
+                                {% endif %}
+                            </td>
+                            <td>{% if not player.link == 'No link' %}
+                                <a target="_blank" href="{{ player.link }}">view</a>{% else %}
+                                No link{% endif %}
+                            </td>
+
+                            <td>{{ player.mov }}</td>
+                        <td>{{ player.sos }}</td>
+                            <td>{{ player.swiss_rank }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <p class="debug">{{ event }}</p>
+{% endblock %}

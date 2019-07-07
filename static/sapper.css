@@ -1,0 +1,202 @@
+@font-face {
+    font-family: 'Eurostile Reg';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Eurostile Reg'), url('eurostile.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Bank Gothic Light';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Bank Gothic Light'), url('ufonts.com_bank-gothic-light.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Bank Gothic Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Bank Gothic Medium'), url('ufonts.com_bank-gothic-medium.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Kimberley';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Kimberley'), url('kimberley-bl.ttf') format('truetype');
+}
+
+* {
+    font-family: 'Eurostile Reg', 'sans-serif';
+}
+
+body {
+    color: white;
+    background-color: #708090;
+}
+
+.top-table {
+    color: #FF9B08;
+    margin: 0;
+}
+
+table td.player-name {
+    font-family: 'Bank Gothic Medium', 'sans-serif';
+}
+
+table td.table-date {
+    /*font-family: 'Kimberley', 'sans-serif';*/
+}
+
+h1, h2, h3, h5 {
+    font-family: 'Bank Gothic Medium', 'sans-serif';
+    text-transform: uppercase;
+}
+
+h4 {
+    font-family: 'Eurostile Reg', 'sans-serif';
+    text-transform: uppercase;
+}
+
+p {
+    font-family: 'Eurostile Reg', 'sans-serif';
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+    bottom: .5em;
+}
+
+#content {
+    padding: 10px 20px;
+}
+
+a {
+    color: #FF9B08;
+}
+
+.trophy-swiss {
+
+}
+
+.trophy-winner {
+    color: gold;
+}
+
+.trophy-second {
+    color: silver;
+}
+
+.card {
+    background-color: transparent;
+    padding: 12px;
+    height: 300px;
+}
+
+.card-event-table {
+    margin-top: 20px;
+    height: fit-content;
+}
+
+.card-top {
+    background-color: #FF9B08;
+    margin-bottom: 8px;
+    padding-top: 12px;
+    height: 90px;
+}
+
+.card-1 {
+    background-color: gold;
+    z-index: 0;
+}
+
+.card-1:after {
+    background-image: url("1st.png");
+    opacity: 0.4;
+    background-size: cover;
+    background-repeat: no-repeat, repeat;
+    background-position: bottom right;
+    background-color: gold;
+    background-size: 80px;
+    z-index: -2;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+.card-2 {
+    background-color: silver;
+    z-index: 0;
+}
+
+.card-2:after {
+    background-image: url("2nd.png");
+    opacity: 0.4;
+    background-size: cover;
+    background-repeat: no-repeat, repeat;
+    background-position: bottom right;
+    background-color: silver;
+    background-size: 80px;
+    z-index: -2;
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+}
+
+h5 {
+    font-family: 'Bank Gothic Light', 'sans-serif';
+    font-size: 20px;
+    margin-top: 4px;
+}
+
+.event-summary {
+    border-left: 2px white solid;
+}
+
+#footer {
+    padding: 12px;
+}
+
+#eventList_length {
+    /*position: absolute;*/
+    /*top: 36%;*/
+}
+
+.paginate_button .page-item a {
+    font-family: 'Kimberley', 'sans-serif' !important;
+}
+
+.paginate_button .page-item .previous a, .paginate_button .page-item .next a {
+    font-family: 'Eurostile Reg', 'sans-serif' !important;
+}
+
+table {
+    max-width: 100%
+}
+
+.top-player-name {
+    text-shadow: black 2px 2px;
+    font-weight: 900;
+}
+
+.event-name {
+    margin: 0;
+}

@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% set active_page = "events" %}
+
+{% block title %}Tournament List{% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+    <h2>Tournament List</h2>
+    <p class="important">
+        All tournament results uploaded to ListFortress.</p>
+    <p class="small"><a href="{{ api }}">Source data</a></p>
+
+    {% if data %}
+        <table id="eventList" class="table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"
+               cellspacing="0" width="100%">
+            <thead>
+            <tr>
+                <th class="mdl-data-table__cell--non-numeric">Event</th>
+
+                <th class="mdl-data-table__cell--non-numeric">Country</th>
+                <th class="date-sort mdl-data-table__cell--non-numeric">Date</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for event in data %}
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric"><a href="/events/{{ event.id }}">{{ event.name }}</a>
+                    </td>
+                    <td class="mdl-data-table__cell--non-numeric">{{ event.country }}</td>
+                    <td class="table-date mdl-data-table__cell--non-numeric">{{ event.date }}</td>
+                </tr>
+                </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $('#eventList').DataTable({
+                "order": [[2, "desc"]],
+                "oLanguage": {
+                    "sLengthMenu": "_MENU_",
+                    "sSearch": "_INPUT_" //search
+                }
+            });
+            $('.dataTables_length').addClass('bs-select');
+            $('.dataTables_filter input').attr("placeholder", "Search...");
+
+        });</script>
+
+{% endblock %}

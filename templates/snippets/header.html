@@ -1,0 +1,21 @@
+<div id="header">
+    {% block header %}
+        {% set navigation_bar = [
+    ('/', 'index', 'Index'),
+    ('/events', 'events', 'Tournaments'),
+    ('/about', 'about', 'About')
+    ] -%}
+        {% set active_page = active_page|default('index') -%}
+        <nav class="navbar navbar-expand-sm bg-light">
+
+            <ul id="navigation" class="navbar-nav">
+                {% for href, id, caption in navigation_bar %}
+                    <li class="nav-item {% if id == active_page %} active{% endif %}"><a class="nav-link"
+                                                                                         href="{{ href|e }}">{{ caption|e }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+
+    {% endblock %}
+</div>
