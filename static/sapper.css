@@ -32,12 +32,24 @@
 
 body {
     color: white;
-    background-color: #708090;
+    /*background-color: #708090;*/
+    background-color: #0e89e6;
 }
 
 .top-table {
     color: #FF9B08;
+    /*color: #b6272a;*/
     margin: 0;
+}
+
+table {
+    max-width: 100%
+}
+
+table td {
+    color: #FF9B08;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 table td.player-name {
@@ -48,9 +60,19 @@ table td.table-date {
     /*font-family: 'Kimberley', 'sans-serif';*/
 }
 
+table.table thead th {
+    border-top: none;
+    color: black;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: 600;
+    /*background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));*/
+}
+
 h1, h2, h3, h5 {
     font-family: 'Bank Gothic Medium', 'sans-serif';
     text-transform: uppercase;
+    text-shadow: 2px 2px black;
 }
 
 h4 {
@@ -81,6 +103,7 @@ table.dataTable thead .sorting_desc_disabled:before {
 
 a {
     color: #FF9B08;
+    /*color: #b6272a*/
 }
 
 .trophy-swiss {
