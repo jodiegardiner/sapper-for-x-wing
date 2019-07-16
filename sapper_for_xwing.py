@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 import requests
 import json
+import os
 from jinja2 import Environment, FileSystemLoader
 
 app = Flask(__name__)
@@ -22,6 +23,7 @@ def map_icon(faction):
     else:
         return faction
 
+
 @app.context_processor
 def utility_processor():
     def get_faction_icon(faction):
@@ -30,14 +32,25 @@ def utility_processor():
 
     return dict(get_faction_icon=get_faction_icon)
 
+
 @app.context_processor
-def ship_processor():
-    def get_ship_icon(pilot):
+def utility_processor():
+    def get_ship_icon(name):
+        # print(os.path.join('Applications','PyCharm.app', 'Contents', 'bin', 'xwing-data', 'data', 'pilots'))
+        # print(os.getcwd())
+        for root, dirs, files in os.walk('/Users/jodie/funstuff/sapper_for_xwing/xwing-data2/data/pilots'):
+            for file in files:
+                with open(os.path.join(root, file), "r") as auto:
+                    full_json = json.load(auto)
+                    # print(full_json)
+                    try:
+                        if full_json['xws'] == str(name):
+                            return u'{0}'.format(full_json['icon'])
+                            # print(full_json)
+                    except:
+                        continue
 
-
-        return u'url_for_icon.jpg'
     return dict(get_ship_icon=get_ship_icon)
-
 
 
 @app.route('/')
