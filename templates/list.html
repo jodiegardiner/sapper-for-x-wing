@@ -18,20 +18,37 @@
             <tr>
                 <th class="mdl-data-table__cell--non-numeric">Event</th>
 
+
                 <th class="mdl-data-table__cell--non-numeric">Country</th>
+                <th class="mdl-data-table__cell--non-numeric">Format</th>
+
                 <th class="date-sort mdl-data-table__cell--non-numeric">Date</th>
 
             </tr>
             </thead>
             <tbody>
             {% for event in data %}
+                {% if event.format_id == 1 %}
+                    {% set format = 'Extended' %}
+                {% elif event.format_id == 2 %}
+                    {% set format = '2nd Edition' %}
+                {% elif event.format_id == 3 %}
+                    {% set format = 'Custom' %}
+                {% elif event.format_id == 4 %}
+                    {% set format = 'Other' %}
+                {% elif event.format_id == 34 %}
+                    {% set format = 'Hyperspace' %}
+                {% else %}
+                    {% set format = 'Unknown' %}
+                {% endif %}
                 <tr>
                     <td class="mdl-data-table__cell--non-numeric"><a href="/events/{{ event.id }}">{{ event.name }}</a>
                     </td>
                     <td class="mdl-data-table__cell--non-numeric">{{ event.country }}</td>
+
+                    <td class="mdl-data-table__cell--non-numeric">{{ format }}</td>
                     <td class="table-date mdl-data-table__cell--non-numeric">{{ event.date }}</td>
                 </tr>
-                </div>
             {% endfor %}
             </tbody>
         </table>
@@ -43,7 +60,8 @@
     <script>
         $(document).ready(function () {
             $('#eventList').DataTable({
-                "order": [[2, "desc"]],
+                "processing": true,
+                "order": [[3, "desc"]], // Set initial table ordering to date desc
                 "oLanguage": {
                     "sLengthMenu": "_MENU_",
                     "sSearch": "_INPUT_" //search

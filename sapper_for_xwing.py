@@ -76,28 +76,35 @@ def tournaments():
 @app.route('/events/<id>')
 def event(id):
     api = 'https://listfortress.com/api/v1/tournaments/'
+
+    if not id:
+        data = []
+        return render_template('list.html', data=data, api=api, error="You must provide an ID")
+
     r = requests.get(api + id)
     data = r.json()
-    print(data)
-
-    for player in data['participants']:
+    for player in data.get('participants', ''):
         print(player)
 
         if player['list_json']:
             player['list_json'] = json.loads(player['list_json'])
             # player['list_json']['faction'] = map_icon(player['list_json']['faction'])
-            if player['list_json']['vendor']:
-                for v in player['list_json']['vendor']:
-                    try:
-                        player['link'] = player['list_json']['vendor'][v]['link']
-                    except:
-                        player['link'] = 'No link'
-            else:
-                player['link'] = "No link"
+            try:
+                if player['list_json']['vendor']:
+                    for v in player['list_json']['vendor']:
+                        try:
+                            player['link'] = player['list_json']['vendor'][v]['link']
+                        except:
+                            player['link'] = 'No link'
+                else:
+                    player['link'] = "No link"
+            except:
+                player['link'] = "Unrecognised Vendor"
 
     print(data)
 
     return render_template('event.html', event=data, api=api)
+
 
 @app.route('/about')
 def about():
