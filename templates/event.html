@@ -1,31 +1,59 @@
 {% extends "layout.html" %}
+
+{% set event_size = event.participants|length %}
+{% if event.format_id == 1 %}
+    {% set format = 'Extended' %}
+{% elif event.format_id == 2 %}
+    {% set format = '2nd Edition' %}
+{% elif event.format_id == 3 %}
+    {% set format = 'Custom' %}
+{% elif event.format_id == 4 %}
+    {% set format = 'Other' %}
+{% elif event.format_id == 34 %}
+    {% set format = 'Hyperspace' %}
+{% else %}
+    {% set format = 'Unknown' %}
+{% endif %}
+
 {% block title %}Event Detail{% endblock %}
 {% block content %}
-    {% set event_size = event.participants|length %}
+
+
 
     <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-12">
             <div class="card">
 
                 <h2 class="event-name">{{ event.name }}</h2>
-                <div class="col-sm-6">
-                    <h4>{{ event.location }}, {{ event.state }} <span
-                            class="float-right event-country">{{ event.country }} </span></h4>
-                    <h4>{{ event.date }} <span class="float-right num-players">{{ event_size }}&nbsp;<i
-                            title="{{ event_size }} players"
-                            class="fas fa-users"></i></span></h4>
-                    <h4>ID: {{ event.id }} <span class="float-right json-link"><a
-                            href="{{ api }}{{ event.id }}">Source</a></span>
-                    </h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-4">
-            <div class="card">
                 <div class="row">
+                    <div class="col-sm-8">
+                        {% if event.location and event.state %}
+                            <h4>{{ event.location }}, {{ event.state }} <span
+                                    class="float-right event-country">{{ event.country }} </span></h4>
+                        {% elif event.location %}
+                            <h4>{{ event.location }}<span
+                                    class="float-right event-country">{{ event.country }} </span></h4>
 
-                    <div class="col-sm-12"><h2 class="top-table">TOP 4</h2>
+                        {% elif event.state %}
+                            <h4>{{ event.state }}<span
+                                    class="float-right event-country">{{ event.country }} </span></h4>
+                        {% elif event.country %}
+                            <h4>{{ event.country }}</h4>
+                        {% else %}
+                            <h4>No location info</h4>
+                        {% endif %}
+
+                        {% if event.date %}
+                            <h4>{{ event.date }} <span class="float-right num-players">{{ event_size }}&nbsp;<i
+                                    title="{{ event_size }} players"
+                                    class="fas fa-users"></i></span></h4>
+                        {% endif %}
+                        <h4>{{ format }} <span class="float-right json-link"><a
+                                href="{{ api }}{{ event.id }}">Source</a></span>
+                        </h4>
+                    </div>
+                    <div class="col-sm-4 ">
+                        <h2 class="top-table">TOP 4</h2>
                         <hr>
                         <div class="row">
                             {% for player in event.participants %}
@@ -45,68 +73,107 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
-            <div class="card card-event-table">
+    <div class="col-sm-12">
+        <div class="card card-event-table">
+
+            <table id="eventItem"
+                   class="table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"
+                   cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th class="mdl-data-table__cell--non-numeric"></th>
+                    <th class="mdl-data-table__cell--non-numeric">Player</th>
+                    <th class="mdl-data-table__cell--non-numeric">Faction</th>
+                    <th class="mdl-data-table__cell--non-numeric">List json</th>
+
+                    <th class="mdl-data-table__cell--non-numeric">List</th>
+                    <th class="mdl-data-table__cell--non-numeric">Score</th>
+                    <th class="mdl-data-table__cell--non-numeric">MoV</th>
+                    <th class="mdl-data-table__cell--non-numeric">SoS</th>
+                    <th class="mdl-data-table__cell--non-numeric">Swiss Rank</th>
 
 
-                <table class="table table-responsive table-striped">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Player</th>
-                        <th>Faction</th>
-                        <th>List json</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for player in event.participants %}
 
-                        <th>List</th>
-                        <th>MoV</th>
-                        <th>SoS</th>
-                        <th>Swiss Rank</th>
+                    <tr class="player-row {% if player.dropped %}player-dropped{% endif %}">
+                        <td class="mdl-data-table__cell--non-numeric">{% if player.swiss_rank == 1 %}
+                            <i title="Topped Swiss" class="fas fa-trophy trophy-swiss"></i>{% else %}{% endif %}
+                            {% if loop.index == 1 %}&nbsp;
+                                <i title="Winner" class="fas fa-trophy trophy-winner"></i>{% elif loop.index == 2 %}
+                                &nbsp;
+                                <i title="2nd" class="fas fa-trophy trophy-second"></i>{% endif %}</td>
+                        <td class="mdl-data-table__cell--non-numeric player-name">{{ player.name }}</td>
+                        {% if player.list_json.faction %}
 
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for player in event.participants %}
-                        <tr>
-                            <td>{% if player.swiss_rank == 1 %}
-                                <i title="Topped Swiss" class="fas fa-trophy trophy-swiss"></i>{% else %}{% endif %}
-                                {% if loop.index == 1 %}&nbsp;
-                                    <i title="Winner" class="fas fa-trophy trophy-winner"></i>{% elif loop.index == 2 %}
+                            <td class="mdl-data-table__cell--non-numeric player-faction"><img
+                                    class='img img-responsive img-faction' src="{{ url_for('static', filename=get_faction_icon(player.list_json.faction)) }}">
+                            </td>
+                        {% else %}
+                            <td class="mdl-data-table__cell--non-numeric"><i title="No list available"
+                                                                             class="fa fa-question"></i></td>
+                        {% endif %}
+                        <td class="mdl-data-table__cell--non-numeric player-list-json">
+                            {% if player.list_json %}
+                                {% for pilot in player.list_json.pilots %}
+                                    {% set icon = get_ship_icon(pilot.ship) %}
+                                    {% if icon != None %}
+                                    <img class="img-icon img img-responsive" src="{{ icon }}" alt="">&nbsp;
                                     &nbsp;
-                                    <i title="2nd" class="fas fa-trophy trophy-second"></i>{% endif %}</td>
-                            <td>{{ player.name }}</td>
-                            {% if player.list_json.faction %}
-
-                                <td><img
-                                        src="{{ url_for('static', filename=get_faction_icon(player.list_json.faction)) }}">
-                                </td>
-                            {% else %}
-                                <td><i class="fa fa-question"></i></td>
+                                    {% else %}
+                                    <i class="img-icon fa fa-question"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %} No link
                             {% endif %}
-                            <td>
-                                {% if player.list_json %}
-                                    {% for pilot in player.list_json.pilots %}
-                                        {{ pilot.ship }} - {{ pilot.id }}
-                                        {#                            <img src="{{ url_for('static', filename=get_ship_icon(pilot.ship)) }}" alt="">&nbsp;&nbsp;#}
-                                    {% endfor %}
-                                {% else %} No link
-                                {% endif %}
-                            </td>
-                            <td>{% if not player.link == 'No link' %}
-                                <a target="_blank" href="{{ player.link }}">view</a>{% else %}
-                                No link{% endif %}
-                            </td>
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric player-link">{% if not player.link == 'No link' %}
+                            <a target="_blank" href="{{ player.link }}"><i class="fas fa-link"></i></a>{% else %}
+                            No link{% endif %}
+                        </td>
+                        <td class="mdl-data-table__cell--non-numeric player-score">{{ player.score }}</td>
 
-                            <td>{{ player.mov }}</td>
-                        <td>{{ player.sos }}</td>
-                            <td>{{ player.swiss_rank }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                        <td class="mdl-data-table__cell--non-numeric player-mov">{{ player.mov }}</td>
+                        <td class="mdl-data-table__cell--non-numeric player-sos">{{ player.sos }}</td>
+                        <td class="mdl-data-table__cell--non-numeric player-swiss-rank">{{ player.swiss_rank }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-            </div>
         </div>
+    </div>
 
+
+    <div class="row">
         <p class="debug">{{ event }}</p>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        $(document).ready(function () {
+            $('#eventItem').DataTable({
+                "pageLength": 50,
+                "processing": true,
+                "order": [[0, "desc"]], // Set initial table ordering to final standings
+                "oLanguage": {
+                    "sLengthMenu": 'Show <select class="event-size">' +
+                    '<option selected value="-1">All {{ event_size }}</option>' +
+                    '<option value="100">100</option>' +
+                    '<option value="50">50</option>' +
+                    '<option value="25">25</option>' +
+                    '<option value="10">10</option>' +
+                    '</select> players',
+                    "sSearch": "_INPUT_" //search
+                }
+            });
+            $('.dataTables_length').addClass('bs-select');
+            $('.dataTables_filter input').attr("placeholder", "Search...");
+
+        });</script>
+
 {% endblock %}
